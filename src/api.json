@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "username": "Joaquin",
+        "gmail": "joaquinpalaciosgomez04@gmail.com",
+        "password": "Anything",
+        "user_data": {
+            "user_profile": {
+                "profile_image": "https://example.com/profile.jpg",
+                "description": "I love sex",
+                "country": "Peru",
+                "stacks": [
+                    "React",
+                    "Python"
+                ],
+                "links": {
+                    "portfolio": "https://joaquinjsx.netlify.app",
+                    "github": "https://github.com/JoaquinJSX"
+                }
+            },
+            "followers": [
+                {
+                    "username": "Theavocoder"
+                }
+            ],
+            "followeds": [
+                {
+                    "username": "Elon Musk"
+                }
+            ],
+            "posts": [
+                {
+                    "id": 1,
+                    "description": "This is my first post",
+                    "tags": [
+                        "#first",
+                        "#post"
+                    ],
+                    "image": "https://example.com/image1.jpg",
+                    "createdAt": "2023-10-01T12:00:00Z",
+                    "comments": [
+                        {
+                            "id": 1,
+                            "user": "Turulas",
+                            "comment": "Great post!",
+                            "createdAt": "2023-10-01T12:05:00Z"
+                        }
+                    ]
+                }
+            ],
+            "messages": [
+                {
+                    "id": 1,
+                    "sender": "Joaquin",
+                    "receiver": "Sandro",
+                    "message": "Saca ps oe",
+                    "sent": "2023-10-01T12:10:00Z"
+                }
+            ]
+        }
+    }
+]
