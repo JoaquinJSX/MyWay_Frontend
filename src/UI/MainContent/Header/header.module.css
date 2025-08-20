@@ -1,0 +1,54 @@
+.headerContainer {
+    margin-top: 10px;
+    width: 60vw;
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: 0.25fr 0.45fr 0.30fr;
+    gap: 5px;
+    max-height: 80px;
+    margin-inline: auto;
+
+}
+
+.showConfigBtn {
+    font-size: 20px;
+    position: relative;
+    top: 24.5px;
+    left: 33px;
+}
+
+.configContainer {
+    position: absolute;
+    width: 100px;
+    margin-top: 25px;
+    margin-left: 0px;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.changeContentBtns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+
+    :nth-child(1), :nth-child(2) {
+        width: 100px;
+        height: 60px;
+        margin-inline: auto;
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+    }
+}
+
+.editInfoContainer {
+    width: 650px;
+    height: 400px;
+    margin-top: 75px;
+    border: 1px solid black;
+    margin-inline: auto;
+    padding: 15px;
+}

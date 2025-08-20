@@ -1,0 +1,5 @@
+.UIContainer {
+    height: 98vh;
+    display: grid;
+    grid-template-rows: 0.10fr 0.90fr;
+}

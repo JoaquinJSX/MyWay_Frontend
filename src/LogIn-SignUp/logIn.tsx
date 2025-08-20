@@ -1,14 +1,15 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from './styles.module.css';
 
 interface LogInProps {
     users: any[];
-    setLoggedIn: any;
     setUserLoggedIn: any;
 }
 
-export default function LogIn({ users, setLoggedIn, setUserLoggedIn }: LogInProps) {
+export default function LogIn({ users, setUserLoggedIn }: LogInProps) {
+
+    const navigate = useNavigate();
 
     const [emailInput, setEmailInput] = useState<string>('');
     const [passwordInput, setPasswordInput] = useState<string>('');
@@ -102,7 +103,8 @@ export default function LogIn({ users, setLoggedIn, setUserLoggedIn }: LogInProp
                         }
 
                     } else {
-                        setUserLoggedIn(userIndex);
+                        setUserLoggedIn(users[userIndex]);
+                        navigate('/main_content');
                     }
                 }
             }

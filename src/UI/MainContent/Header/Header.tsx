@@ -1,8 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UserInfo from "./UserInfo";
-import EditInfo from "./EditInfo";
 import { appContext } from "../../../App";
+import styles from './header.module.css';
 
 interface HeaderProps {
     setWhatIsShowing: any;
@@ -16,14 +15,31 @@ export default function Header({ setWhatIsShowing }: HeaderProps) {
     if (!context) {
         throw new Error("appContext must be used within an AppProvider");
     }
-    const { users, userLoggedIn, setUserLoggedIn } = context;
+    const { userLoggedIn, setUserLoggedIn } = context;
 
     const [showingConfig, setShowingConfig] = useState<boolean>(false);
-    const [showingProfileInfo, setIsShowingProfileInfo] = useState<boolean>(false);
-    const [showingEditInfo, setIsShowingEditInfo] = useState<boolean>(false);
+    const configRef = useRef<HTMLDivElement>(null);
+
+    // Verify if the user clicked outside the config container
+    function handleClickOutside(event: MouseEvent) {
+        if (configRef.current && !configRef.current.contains(event.target as Node)) {
+            // If clicked outside, close the config container
+            setShowingConfig(false);
+        }
+    };
+
+    // Add event listener for clicks outside the config container
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     function deleteAccount() {
-        if (window.confirm('Are you sure that you want delete your account?')) {
+        const promptPassword = prompt("Please enter your password to confirm account deletion:");
+        if (!promptPassword || promptPassword !== userLoggedIn?.password) {
+            alert("Incorrect password. Account deletion cancelled.");
+            return;
+        } else {
             fetch(`http://localhost:3000/users/${userLoggedIn?.id}`, {
                 method: 'DELETE',
                 headers: {
@@ -46,28 +62,25 @@ export default function Header({ setWhatIsShowing }: HeaderProps) {
     }
 
     return (
-        <>
-            <header>
-                <section>
-                    <button onClick={() => setShowingConfig(showingConfig ? false : true)}>⇶</button>
-                    {showingConfig &&
-                        <div>
-                            <p onClick={() => setIsShowingProfileInfo(true)}>Profile info</p>
-                            {showingProfileInfo &&
-                                <UserInfo userLoggedIn={userLoggedIn} />}
-                            <p onClick={() => setIsShowingEditInfo(true)}>Edit info</p>
-                            {showingEditInfo &&
-                                <EditInfo userLoggedIn={userLoggedIn} setUserLoggedIn={setUserLoggedIn} users={users} />}
-                            <p onClick={deleteAccount}>Delete account</p>
-                            <p onClick={logOut}>Log out</p>
-                        </div>}
-                </section>
-                <h1>{userLoggedIn?.username}</h1>
-                <section>
-                    <button onClick={() => setWhatIsShowing('pending_tasks')}>Pendings</button>
-                    <button onClick={() => setWhatIsShowing('completed_tasks')}>Completed</button>
-                </section>
-            </header>
-        </>
+        <header className={styles.headerContainer}>
+            <section>
+                <button className={styles.showConfigBtn}
+                    onClick={() => setShowingConfig(!showingConfig)}>
+                    ⇶
+                </button>
+                {showingConfig &&
+                    <div ref={configRef} className={styles.configContainer}>
+                        <p onClick={() => navigate('/user_info')}>Profile info</p>
+                        <p onClick={() => navigate('/edit_user')}>Edit info</p>
+                        <p onClick={deleteAccount}>Delete account</p>
+                        <p onClick={logOut}>Log out</p>
+                    </div>}
+            </section>
+            <h1>{userLoggedIn?.username}</h1>
+            <section className={styles.changeContentBtns}>
+                <button onClick={() => setWhatIsShowing('pending_tasks')}>Pendings</button>
+                <button onClick={() => setWhatIsShowing('completed_tasks')}>Completed</button>
+            </section>
+        </header>
     );
 }
