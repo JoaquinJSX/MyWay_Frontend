@@ -1,221 +1,188 @@
-.goalContainer {
-    margin-block: 5px;
-    margin-inline: auto;
-    background-color: skyblue;
-    border-radius: 10px;
-    width: 75vw;
+/* goals.module.css */
+/* Variables – mismas que goalShowed.module.css para coherencia temática */
+:root{
+  --bg:#0b0c10; --surface:#111318; --elev:#151821;
+  --text:#e6e7ea; --muted:#a7adbb;
+  --brand:#2e7dff; --ring:rgba(46,125,255,.35);
+  --ok:#28a745; --danger:#ef4444;
+  --radius:16px; --radius-sm:10px;
+  --space:clamp(14px,2.2vw,20px);
+  --space-sm:clamp(8px,1.2vw,12px);
+  --space-lg:clamp(18px,3vw,28px);
 }
 
-.achievedGoalContainer {
-    margin-block: 5px;
-    margin-inline: auto;
-    background-color: lightgreen;
-    border-radius: 10px;
-    width: 35vw;
-    padding-inline: 20px;
+/* ===== Contenedor de metas pendientes (grid) */
+.pendingGoalsContainer{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space);
+  padding: var(--space-lg);
+  background: linear-gradient(180deg, var(--elev), var(--surface));
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius);
+  color: var(--text);
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 
-.aboutGoal {
-    display: grid;
-    grid-template-columns: 50px 1fr 1fr 1fr 160px;
+/* Tarjeta de meta (pendiente) */
+.goalContainer{
+  position: relative;
+  display:grid; gap: 10px;
+  padding: var(--space);
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
+}
+.goalContainer:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0,0,0,.32);
+}
+.aboutGoal h1{ margin: 4px 0 6px; font-size: clamp(18px,2.5vw,22px); }
+.aboutGoal h3{ margin: 0; color: var(--muted); font-weight: 500; }
 
-    h3 {
-        font-size: 15px;
-        text-align: left;
-    }
+/* Botón “Marcar como lograda” (esquina) */
+.setAchievedGoalBtn{
+  position:absolute; top:10px; right:10px;
+  background: rgba(46,125,255,.12);
+  border: 1px solid rgba(46,125,255,.3);
+  color:#cfe0ff;
+  padding: 6px 10px; border-radius: 999px;
+  font-size: 12px; cursor:pointer;
+}
+.setAchievedGoalBtn:hover{ background: rgba(46,125,255,.18); }
+
+/* Progreso */
+.progressContainer{
+  width:100%; height: 26px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 999px; overflow: hidden;
+}
+.progressBar{
+  height:100%; min-width: 22px;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:12px;
+  background: linear-gradient(180deg, var(--brand), #2569d8);
+  color:#fff; box-shadow: 0 6px 16px var(--ring);
+  transition: width .4s ease;
 }
 
-.aboutGoalAchieved {
-    display: grid;
-    grid-template-columns: 150px 1fr 1fr;
+/* Acciones de cada meta */
+.goalButtonsContainer{
+  display:flex; gap:8px; margin-top: 6px;
+}
+.getGoalShowedBtn, .deleteGoalBtn{
+  appearance:none; border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.06);
+  color: var(--text); padding: 8px 12px;
+  border-radius: 10px; font-weight: 600; cursor: pointer;
+  transition: background .2s ease, transform .08s ease;
+}
+.getGoalShowedBtn:hover{ background: rgba(255,255,255,.1); transform: translateY(-1px); }
+.deleteGoalBtn{
+  border-color: rgba(239,68,68,.28);
+  color: #ffd8d8;
+}
+.deleteGoalBtn:hover{ background: rgba(239,68,68,.14); color:#fff; transform: translateY(-1px); }
 
-    h3, h1 {
-        font-size: 15px;
-        text-align: left;
-        text-decoration: line-through;
-    }
-
-    h1 {
-        margin-top: 20px;
-        font-size: 1.1rem;
-    }
-
-    button {
-        width: 100px;
-        height: 30px;
-        border-radius: 5px;
-        background-color: #f44336;
-        color: white;
-        border: none;
-        margin-left: 40px;
-        margin-top: 7.5px;
-
-        &:hover {
-            cursor: pointer;
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
-    }
+/* ===== Estado vacío (sin metas) */
+.no_goals_container{
+  display:grid; place-items:center;
+  gap: 12px; text-align:center;
+  padding: clamp(40px, 8vw, 90px) 16px;
+  color: var(--muted);
+  background: linear-gradient(180deg, var(--elev), var(--surface));
+  border: 1px dashed rgba(255,255,255,.18);
+  border-radius: var(--radius);
 }
 
-.progressContainer {
-    width: 100px;
-    height: 20px;
-    margin-top: 12.5px;
-    text-align: center;
-    border: 2px solid rgb(56, 56, 151);
-    border-radius: 5px;
+/* Botón flotante “crear meta” */
+.create_new_goal_btn{
+  position: fixed; bottom: 22px; right: 22px;
+  width: 54px; height: 54px; border-radius: 18px;
+  border: 0; cursor: pointer; font-size: 24px; line-height: 1;
+  color: #fff;
+  background: linear-gradient(180deg, var(--brand), #2569d8);
+  box-shadow: 0 16px 34px var(--ring), 0 2px 0 rgba(255,255,255,.06) inset;
+  transition: transform .08s ease, box-shadow .2s ease;
+  z-index: 30;
 }
+.create_new_goal_btn:hover{ transform: translateY(-2px); }
+.create_new_goal_btn:focus-visible{ outline: 2px solid var(--ring); outline-offset: 3px; }
 
-.progressBar {
-    background-color: rgb(41, 187, 51);
+.createBtn, .cancelBtn{
+  appearance:none; border:0; cursor:pointer;
+  padding: 10px 14px; border-radius: 10px; font-weight:700;
 }
-
-.setAchievedGoalBtn {
-    border: none;
-
-    &:hover {
-            cursor: pointer;
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
+.createBtn{
+  background: linear-gradient(180deg, var(--brand), #2569d8);
+  color:#fff; box-shadow: 0 6px 16px var(--ring);
+  margin-right: 6px;
 }
-
-.iconCategory {
-    font-size: 30px;
-    position: relative;
-    top: 5px;
+.cancelBtn{
+  background: rgba(255,255,255,.06); color: var(--text);
+  border: 1px solid rgba(255,255,255,.12);
 }
+.createBtn:hover{ transform: translateY(-1px); }
+.cancelBtn:hover{ background: rgba(255,255,255,.1); }
 
-.goalShowedContainer {
-    border: 1px solid black;
-    margin: 5px auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 75%;
-    height: auto;
-    background-color: #f0f0f0;
-    padding: 20px;
-}
+/* ===== Responsivo */
+@media (max-width: 640px){
+  /* Grid de metas: 1 columna  */
+  .pendingGoalsContainer{
+    grid-template-columns: 1fr; /* en móvil una sola columna */
+    gap: 14px;
+    padding: 14px;
+    border-radius: 12px;
+  }
 
-.goalShowedHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 90%;
-    margin-bottom: 20px;
-    text-align: left;
+  /* Tarjetas más compactas y sin “salto” visual excesivo */
+  .goalContainer{
+    padding: 14px;
+    border-radius: 12px;
+  }
 
-    h1 {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-}
+  /* Botonera: apílala si no cabe y aumenta área táctil */
+  .goalButtonsContainer{
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .goalButtonsContainer > button{
+    padding: 10px 12px;
+    flex: 1 1 auto;         /* los botones se estiran en la fila */
+    min-width: 44%;         /* 2 columnas si hay espacio */
+  }
 
-.goalButtonsContainer {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  /* Progreso: altura menor y texto sin romper layout */
+  .progressContainer{
+    height: 18px;
+    border-radius: 999px;
+  }
+  .progressBar{
+    font-size: 11px;
+    min-width: auto;
+  }
 
-    button {
-        width: 75px;
-        border: none;
-        height: 25px;
-        margin-inline: 7.5px;
-        position: relative;
-        bottom: 10px;
-        border-radius: 7.5px;
+  /* Botón flotante crear: más pequeño y pegado al borde */
+  .create_new_goal_btn{
+    right: 12px;
+    bottom: 12px;
+    width: 48px; height: 48px; border-radius: 16px;
+  }
 
-        &:hover {
-            cursor: pointer;
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
-    }
-}
+  /* Metas logradas */
+  .achievedGoalContainer{
+    margin: 0 12px 12px;
+    padding: 14px;
+    border-radius: 12px;
+  }
 
-.getGoalShowedBtn {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.deleteGoalBtn {
-    background-color: #f44336;
-    color: white;
-}
-
-.no_goals_container {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    font-size: 1.7rem;
-    color: #454545;
-    text-align: center;
-    margin-top: 20px;
-
-    button {
-        position: relative;
-        left: 150px;
-        height: 40px;
-        width: 40px;
-    }
-}
-
-.create_new_goal_btn {
-    border: none;
-    margin-left: 100px;
-    margin-bottom: 10px;
-    font-size: 30px;
-    background-color: rgb(64, 203, 64);
-    height: 32px;
-    width: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-
-    &:hover {
-            cursor: pointer;
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
-}
-
-.new_goal_container {
-    width: 40vw;
-    height: 40vh;
-    text-align: center;
-    margin-inline: auto;
-    background-color: #f0f0f0;
-    padding: 25px;
-    border-radius: 10px;
-
-    input[type="text"] {
-        width: 120px;
-    }
-
-    select {
-        margin-block: 15px;
-    }
-
-    button {
-        margin-inline: 5px;
-        height: 30px;
-        width: 80px;
-        border: none;
-        border-radius: 5px;
-    }
-
-    .createBtn {
-        background-color: #4CAF50;
-        color: white;
-    }
-
-    .cancelBtn {
-        background-color: #f44336;
-        color: white;
-    }
+  /* Formulario “nueva meta” */
+  .new_goal_container{
+    margin: 12px;
+    padding: 14px;
+    border-radius: 12px;
+    gap: 12px;
+  }
 }

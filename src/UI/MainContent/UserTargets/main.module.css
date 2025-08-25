@@ -1,6 +1,64 @@
-.mainContainer {
-    height: auto;
-    margin: auto;
-    height: auto;
-    width: 90vw;
+/* main.module.css */
+/* Variables globales compartidas */
+:root{
+  --bg:#0b0c10; 
+  --surface:#111318; 
+  --elev:#151821;
+  --text:#e6e7ea; 
+  --muted:#a7adbb;
+  --brand:#2e7dff; 
+  --ring:rgba(46,125,255,.35);
+  --radius:16px; 
+  --radius-sm:12px;
+  --space:clamp(14px,2.2vw,20px);
+  --space-lg:clamp(22px,4vw,36px);
+}
+
+/* Fondo global de la app */
+:global(body){
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(46,125,255,.08), transparent 60%),
+    radial-gradient(900px 500px at 0% 10%, rgba(255,255,255,.04), transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: system-ui, sans-serif;
+}
+
+/* Contenedor principal */
+.mainContainer{
+  box-sizing: border-box;
+  width: min(1120px, 92vw);
+  margin-inline: auto;
+  margin-block: var(--space-lg);
+  padding: var(--space-lg) var(--space);
+  display: grid;
+  gap: var(--space-lg);
+
+  /* Fondo oscuro a juego con Goals/GoalShowed */
+  background: linear-gradient(180deg, var(--elev), var(--surface));
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 40px rgba(0,0,0,.35);
+  color: var(--text);
+}
+
+/* Área de contenido */
+.contentArea{
+  display: grid;
+  gap: var(--space);
+}
+
+/* Versión móvil */
+@media (max-width: 640px){
+  .mainContainer{
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    box-shadow: none;
+    padding: 14px 12px;
+    background: transparent; /* deja ver el fondo global */
+  }
 }

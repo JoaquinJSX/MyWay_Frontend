@@ -1,129 +1,71 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { UIContext } from "../../../UI";
-import Category from "./GoalCategory";
-import styles from './goals.module.css';
+import styles from "./completedGoals.module.css";
 
 export default function CompletedGoals() {
+  const context = useContext(UIContext);
+  if (!context) throw new Error("UIContext must be used within a provider");
+  const { goals, setGoals } = context;
 
-    const [achievedGoals, setAchievedGoals] = useState<any[]>([]);
+  const completed = goals.filter(g => g.achieved);
 
-    const context = useContext(UIContext);
-    if (!context) {
-        throw new Error("appContext must be used within an AppProvider");
+  async function deleteGoal(goalId: string) {
+    try {
+      const res = await fetch(`https://myway-backend.fly.dev/goals/${goalId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Delete failed");
+      setGoals(prev => prev.filter(g => g.goal_id !== goalId));
+      alert("Goal deleted successfully");
+    } catch (e:any) {
+      alert(`Error deleting goal: ${e.message}`);
     }
-    const { goals, setGoals } = context;
+  }
 
-    // Obtain from the 'goals' only those that have been achieved
-    useEffect(() => {
-        setAchievedGoals(goals.filter(goal => goal.achieved));
-    }, [goals]);
-
-    // Mark goal as achieved or desmark it
-    function setAchievedGoal(goalProp: any) {
-        // Alternatively, toggle the achieved status of the goal (true if it was false, and vice versa)
-        const newAchievedStatus = !goalProp.achieved;
-
-        fetch(`http://localhost:3000/goals/${goalProp.goal_id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ achieved: newAchievedStatus })
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        }).then(() => {
-            // Update the state to reflect the change
-            setGoals(goals.map(goal =>
-                goal.goal_id === goalProp.goal_id ? { ...goal, achieved: newAchievedStatus } : goal
-            ));
-        })
-            .catch(error => {
-                console.error('Error updating goal:', error);
-                alert("Error updating goal: " + error.message);
-            });
+  async function markAsPending(goalId: string) {
+    try {
+      const res = await fetch(`https://myway-backend.fly.dev/goals/${goalId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ achieved: false })
+      });
+      if (!res.ok) throw new Error("Update failed");
+      setGoals(prev => prev.map(g => g.goal_id === goalId ? { ...g, achieved: false } : g));
+      alert("Goal moved back to pending");
+    } catch (e:any) {
+      alert(`Error updating goal: ${e.message}`);
     }
+  }
 
-    // Delete goal receiving the goal_id as prop
-    function deleteGoal(goalId: string) {
-        fetch(`http://localhost:3000/goals/${goalId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        }).then(() => {
-            setGoals(goals.filter(goal => goal.goal_id !== goalId));
-        })
-            .catch(error => {
-                console.error('Error deleting goal:', error);
-                alert("Error deleting goal: " + error.message);
-            });
-    }
-
-    // Function to get the percentage of steps completed for a goal
-    const PercentageOfStepsCompleted = ({ goalId }: { goalId: string }) => {
-        const context = useContext(UIContext);
-        if (!context) {
-            throw new Error("appContext must be used within an AppProvider");
-        }
-        const { steps } = context;
-
-        // Filter steps to get only those that belong to the current goal
-        const goalSteps = steps.filter((step: any) => step.goal_id === goalId);
-
-        // Calculate the number of completed steps
-        const completedStepsCount = goalSteps.filter((step: any) => step.achieved).length;
-
-        // Calculate the percentage of completed steps
-        let progressPercentage = 0;
-        if (goalSteps.length > 0) {
-            progressPercentage = (completedStepsCount / goalSteps.length) * 100;
-        }
-
-        // Render the progress bar with the calculated percentage
-        return (
-            <div className={styles.progressContainer}>
-                <div
-                    className={styles.progressBar}
-                    style={{ width: `${progressPercentage}%`, backgroundColor: 'green' }}
-                >
-                    {progressPercentage.toFixed(0)}%
+  return (
+    <section className={styles.wrapper} aria-label="Metas completadas">
+      {completed.length === 0 ? (
+        <div className={styles.empty}>
+          <p>No tienes metas completadas todavía.</p>
+          <small>Vuelve a la pestaña Pendings para seguir trabajando en tus metas.</small>
+        </div>
+      ) : (
+        <div className={styles.grid}>
+          {completed.map(goal => (
+            <article key={goal.goal_id} className={styles.card}>
+              <header className={styles.head}>
+                <span className={styles.emoji} aria-hidden>🟢</span>
+                <div>
+                  <h2 className={styles.title}>{goal.goal_name}</h2>
+                  {goal.due_date && <div className={styles.meta}>Vencía: {new Date(goal.due_date).toLocaleDateString()}</div>}
                 </div>
-            </div>
-        );
-    };
+              </header>
 
-    return (
-        <>
-            {achievedGoals.length > 0 ? (
-                achievedGoals.map(goal => (
-                    <section className={styles.achievedGoalContainer} key={goal.goal_id}>
-                        <button className={styles.setAchievedGoalBtn} onClick={() => setAchievedGoal(goal)}>
-                            Mark as pending
-                        </button>
-                        <section className={styles.aboutGoalAchieved}>
-                            <Category category={goal.category} />
-                            <h1>
-                                {goal.goal_name}
-                            </h1>
-                            {/* <p>Achieved steps percentage:</p> */}
-                            {/* <PercentageOfStepsCompleted goalId={goal.goal_id} /> */}
-                            <div>
-                                <button onClick={() => deleteGoal(goal.goal_id)}>Delete</button>
-                            </div>
-                        </section>
-                    </section>
-                ))
-            ) : (
-                <h2>You haven't achieved goals yet.</h2>
-            )}
-        </>
-    );
+              <div className={styles.actions}>
+                <button className={`${styles.btn} ${styles.restore}`} onClick={() => markAsPending(goal.goal_id)}>
+                  Marcar como pendiente
+                </button>
+                <button className={`${styles.btn} ${styles.delete}`} onClick={() => deleteGoal(goal.goal_id)}>
+                  Delete
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </section>
+  );
 }

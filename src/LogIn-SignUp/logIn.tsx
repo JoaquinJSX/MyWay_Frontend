@@ -66,7 +66,7 @@ export default function LogIn({ users, setUserLoggedIn }: LogInProps) {
                 emailRef.current.style.outline = "none";
                 emailRef.current.style.border = "1px solid red";
             }
-        } else if (users.length == 0) {
+        } else if (users.length == 0 || users.length === undefined) {
             setEmailError("User not found");
             if (emailRef.current) {
                 emailRef.current.focus();

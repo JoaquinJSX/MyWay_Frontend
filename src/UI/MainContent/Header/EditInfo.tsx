@@ -95,14 +95,14 @@ export default function EditInfo({ userLoggedIn, setUserLoggedIn, users }: EditU
             alert("Password must be at least 6 characters long");
             return;
         } else {
-            fetch(`http://localhost:3000/users/${userLoggedIn.id}`, {
+            fetch(`https://myway-backend.fly.dev/users/${userLoggedIn.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ ...editedUser, password: userLoggedIn.password })
             }).then(() => {
-                fetch(`http://localhost:3000/users/${userLoggedIn.id}`)
+                fetch(`https://myway-backend.fly.dev/users/${userLoggedIn.id}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`HTTP error! status: ${response.status}`);
@@ -110,7 +110,7 @@ export default function EditInfo({ userLoggedIn, setUserLoggedIn, users }: EditU
                         return response.json();
                     })
                     .then(data => setUserLoggedIn(data))
-                    .catch(error => console.error('Fetch error:', error)); 
+                    .catch(error => console.error('Fetch error:', error));
             })
                 .catch(error => {
                     console.error('Error updating user:', error);
@@ -151,25 +151,33 @@ export default function EditInfo({ userLoggedIn, setUserLoggedIn, users }: EditU
                 :
                 <section>
                     <section>
-                {whatIsShowing === "username" &&
-                    <input type="text"
-                        ref={usernameRef}
-                        value={editedUser.username}
-                        onChange={e => setEditedUser({ ...editedUser, username: e.target.value })}
-                    />}
-                {whatIsShowing === "email" &&
-                    <input type="text"
-                        ref={emailRef}
-                        value={editedUser.email}
-                        onChange={e => setEditedUser({ ...editedUser, email: e.target.value })}
-                    />}
-                {whatIsShowing === "password" &&
-                    <input type="password"
-                        ref={passwordRef}
-                        value={editedUser.password}
-                        onChange={e => setEditedUser({ ...editedUser, password: e.target.value })}
-                    />}
-            </section>
+                        {whatIsShowing === "username" &&
+                            <>
+                                <input type="text"
+                                    ref={usernameRef}
+                                    value={editedUser.username}
+                                    onChange={e => setEditedUser({ ...editedUser, username: e.target.value })}
+                                />
+                                <br />
+                                {usernameError && <p className={styles.error}>{usernameError}</p>}
+                            </>}
+                        {whatIsShowing === "email" &&
+                            <>
+                                <input type="text"
+                                    ref={emailRef}
+                                    value={editedUser.email}
+                                    onChange={e => setEditedUser({ ...editedUser, email: e.target.value })}
+                                />
+                                <br />
+                                {emailError && <p className={styles.error}>{emailError}</p>}
+                            </>}
+                        {whatIsShowing === "password" &&
+                            <input type="password"
+                                ref={passwordRef}
+                                value={editedUser.password}
+                                onChange={e => setEditedUser({ ...editedUser, password: e.target.value })}
+                            />}
+                    </section>
                     <button onClick={() => setTryingSendEditedData(true)}>Send</button>
                     <button onClick={() => setWhatIsShowing('')}>Close</button>
                 </section>

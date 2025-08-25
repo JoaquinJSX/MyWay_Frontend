@@ -40,7 +40,7 @@ export default function Header({ setWhatIsShowing }: HeaderProps) {
             alert("Incorrect password. Account deletion cancelled.");
             return;
         } else {
-            fetch(`http://localhost:3000/users/${userLoggedIn?.id}`, {
+            fetch(`https://myway-backend.fly.dev/users/${userLoggedIn?.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

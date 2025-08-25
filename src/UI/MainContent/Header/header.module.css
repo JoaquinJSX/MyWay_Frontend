@@ -1,54 +1,168 @@
+/* header.module.css */
+:root {
+  --bg: #0b0c10;
+  --surface: #111318;
+  --elev: #151821;
+  --text: #e6e7ea;
+  --muted: #a7adbb;
+  --brand: #2e7dff;
+  --ring: rgba(46,125,255,0.35);
+  --danger: #ef4444;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --space: clamp(12px, 2vw, 18px);
+  --space-lg: clamp(16px, 3vw, 28px);
+}
+
+/* Barra de header a lo ancho (fondo y borde inferior) */
+:global(header), .headerBar {
+  position: sticky;
+  top: 0;
+  z-index: 1100; /* elevado para estar por encima del sidebar */
+  width: 100%;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+    linear-gradient(180deg, var(--elev), var(--surface));
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  backdrop-filter: blur(6px);
+}
+
+/* Contenido centrado con max-width */
 .headerContainer {
-    margin-top: 10px;
-    width: 60vw;
-    border: 1px solid black;
-    display: grid;
-    grid-template-columns: 0.25fr 0.45fr 0.30fr;
-    gap: 5px;
-    max-height: 80px;
-    margin-inline: auto;
-
+  box-sizing: border-box;
+  width: min(1120px, 92vw); /* <— igual que el main */
+  margin-inline: auto;      /* <— centra */
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space);
+  padding: 10px var(--space-lg);
+  color: var(--text);
 }
 
+/* Título */
+.headerContainer h1 {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(18px, 2.8vw, 24px);
+  letter-spacing: .2px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Botón menú/config */
 .showConfigBtn {
-    font-size: 20px;
-    position: relative;
-    top: 24.5px;
-    left: 33px;
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  transition: transform .08s ease, background .2s ease;
 }
+.showConfigBtn:hover {
+  background: rgba(255,255,255,.1);
+  transform: translateY(-1px);
+}
+.showConfigBtn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Popover */
+.headerContainer > section { position: relative; }
 
 .configContainer {
-    position: absolute;
-    width: 100px;
-    margin-top: 25px;
-    margin-left: 0px;
-    text-align: center;
-    border: 1px solid black;
+  position: absolute;
+  left: 8px;               /* 👈 ancla hacia el interior, con margen */
+  right: auto;
+  top: calc(100% + 8px);
+
+  background: linear-gradient(180deg, var(--elev), var(--surface));
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  min-width: 220px;
+  max-width: min(92vw, 320px); /* seguro en móviles */
+  padding: 8px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.35);
+  animation: pop .14s ease-out both;
+
+  z-index: 1001;                 /* sobre el sidebar */
+  transform-origin: top left;    /* animación desde izquierda */
+  overflow: auto;
 }
 
-.changeContentBtns {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-
-    :nth-child(1), :nth-child(2) {
-        width: 100px;
-        height: 60px;
-        margin-inline: auto;
-
-        &:hover {
-            cursor: pointer;
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
-    }
+.configContainer p {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.configContainer p:hover { background: rgba(255,255,255,.06); }
+.configContainer p:nth-child(3) { color: #ffd4d4; }
+.configContainer p:nth-child(3):hover {
+  background: rgba(239,68,68,.12);
+  color: #ffe8e8;
 }
 
-.editInfoContainer {
-    width: 650px;
-    height: 400px;
-    margin-top: 75px;
-    border: 1px solid black;
-    margin-inline: auto;
-    padding: 15px;
+/* Botones “Pendings / Completed” */
+.changeContentBtns { display: inline-flex; gap: 8px; }
+.changeContentBtns > button {
+  appearance: none;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background .2s ease, transform .08s ease, box-shadow .2s ease;
+}
+.changeContentBtns > button:hover {
+  background: rgba(255,255,255,.1);
+  transform: translateY(-1px);
+}
+.changeContentBtns > button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.changeContentBtns > button.active {
+  background: linear-gradient(180deg, var(--brand), #2569d8);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 18px var(--ring);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .headerContainer {
+    width: 100%;
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  .headerContainer h1 { font-size: 16px; }
+  .changeContentBtns { gap: 6px; }
+  .changeContentBtns > button {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
+
+@keyframes pop {
+  from { opacity: 0; transform: translateY(-6px) scale(.98);}
+  to   { opacity: 1; transform: translateY(0) scale(1);}
 }

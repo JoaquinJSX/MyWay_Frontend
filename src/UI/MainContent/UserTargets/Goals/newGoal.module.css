@@ -1,0 +1,96 @@
+/* newGoal.module.css */
+:root{
+  --bg:#0b0c10; --surface:#111318; --elev:#151821;
+  --text:#e6e7ea; --muted:#a7adbb;
+  --brand:#2e7dff; --ring:rgba(46,125,255,.35);
+  --radius:16px; --radius-sm:12px;
+  --space:clamp(14px,2.2vw,20px);
+  --space-lg:clamp(18px,3vw,28px);
+}
+
+/* Panel principal */
+.panel{
+  background: linear-gradient(180deg, var(--elev), var(--surface));
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--radius);
+  box-shadow: 0 16px 40px rgba(0,0,0,.35);
+  padding: clamp(18px, 3vw, 32px);
+  color: var(--text);
+}
+
+/* Título */
+.title{
+  margin: 0 0 14px;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+/* Formulario */
+.form{
+  display: grid;
+  gap: clamp(12px, 2vw, 18px);
+}
+
+/* Grupo */
+.group{ display:grid; gap:8px; }
+
+.label{
+  font-size: 14px; color: var(--muted);
+}
+
+/* Inputs “glass” */
+.input, .select, .date{
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.select option {
+  color: var(--surface);
+}
+.input::placeholder{ color: #8f97a8; }
+.input:focus, .select:focus, .date:focus{
+  border-color: rgba(46,125,255,.45);
+  box-shadow: 0 0 0 4px var(--ring);
+  background: rgba(255,255,255,.09);
+}
+
+/* Fila de acciones */
+.actions{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+/* Botones */
+.btn{
+  appearance: none; cursor: pointer; border-radius: 12px;
+  padding: 12px 16px; font-weight: 800;
+  transition: transform .08s ease, background .2s ease, box-shadow .2s ease;
+  border: 0;
+}
+.primary{
+  background: linear-gradient(180deg, var(--brand), #2569d8);
+  color: #fff;
+  box-shadow: 0 8px 18px var(--ring);
+}
+.primary:hover{ transform: translateY(-1px); }
+
+.ghost{
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.12);
+}
+.ghost:hover{ background: rgba(255,255,255,.1); }
+
+/* Responsive estrecho */
+@media (max-width: 560px){
+  .actions{ grid-template-columns: 1fr; }
+}

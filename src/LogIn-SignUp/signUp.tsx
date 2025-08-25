@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import styles from './styles.module.css';
+import { useNavigate } from "react-router-dom";
 
 interface SignUpProps {
     users: any[];
@@ -13,6 +14,8 @@ interface newUserObject {
 }
 
 export default function SignUp({ users, setUsers }: SignUpProps) {
+
+    const navigate = useNavigate();
 
     const [newUser, setNewUser] = useState<newUserObject>({ username: null, email: null, password: null });
     const passwordRef = useRef<HTMLInputElement>(null);
@@ -85,19 +88,15 @@ export default function SignUp({ users, setUsers }: SignUpProps) {
             alert("Password must be at least 6 characters long");
             return;
         } else {
-            fetch('http://localhost:3000/users', {
+            fetch('https://myway-backend.fly.dev/users', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newUser)
             }).then(() => {
-                alert("User created successfully");
-                setNewUser({
-                    username: '',
-                    password: '',
-                    email: ''
-                });
+                setUsers([...users, newUser]);
+                navigate('/login');
             })
                 .catch(error => {
                     console.error('Error creating user:', error);

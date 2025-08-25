@@ -24,7 +24,7 @@ export default function GoalsContainer({ setGoalShowed, isShowingCreateGoalField
     }, [goals, steps]);
 
     function deleteGoal(goalId: string) {
-        fetch(`http://localhost:3000/goals/${goalId}`, {
+        fetch(`https://myway-backend.fly.dev/goals/${goalId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
@@ -40,7 +40,7 @@ export default function GoalsContainer({ setGoalShowed, isShowingCreateGoalField
 
     // Function to set a goal as achieved or pending
     function setAchievedGoal(goalProp: any) {
-        fetch(`http://localhost:3000/goals/${goalProp.goal_id}`, {
+        fetch(`https://myway-backend.fly.dev/goals/${goalProp.goal_id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -100,7 +100,7 @@ export default function GoalsContainer({ setGoalShowed, isShowingCreateGoalField
                                     {goal.goal_name}
                                 </h1>
                                 <h3>
-                                    Due date: {
+                                    {
                                         new Date(goal.due_date).toLocaleDateString('es-ES', { day: "2-digit", month: "2-digit", year: "numeric" })
                                     }
                                 </h3>

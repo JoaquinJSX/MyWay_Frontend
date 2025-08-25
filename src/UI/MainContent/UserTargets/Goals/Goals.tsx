@@ -7,7 +7,6 @@ import { UIContext } from "../../../UI";
 export default function Goals() {
 
     const [isShowingCreateGoalField, setIsShowingCreateGoalField] = useState<boolean>(false);
-    const [isShowingAllGoals, setIsShowingAllGoals] = useState(true);
     const [goalShowed, setGoalShowed] = useState<string | null>(null);
     const context = useContext(UIContext);
 
@@ -20,17 +19,13 @@ export default function Goals() {
         setIsShowingCreateGoalField(false);
     }, [goals]);
 
-    useEffect(() => {
-        setIsShowingAllGoals(goalShowed === null ? true : false);
-    }, [goalShowed]);
-
     return (
         <div>
             {!isShowingCreateGoalField ?
                 <section>
                     {/*Verify if is showing a specific goal or all the goals container, and return it's 
                             specific component*/}
-                    {isShowingAllGoals ?
+                    {!goalShowed ?
                         <GoalsContainer setGoalShowed={setGoalShowed}
                             isShowingCreateGoalField={isShowingCreateGoalField}
                             setIsShowingCreateGoalField={setIsShowingCreateGoalField}
