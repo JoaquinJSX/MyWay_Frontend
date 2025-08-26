@@ -113,36 +113,57 @@ export default function LogIn({ users, setUserLoggedIn }: LogInProps) {
 
     return (
         <div className={styles.container}>
-            <main className={styles.form}>
-                <h1>Log In</h1>
-                <form>
-                    <label>Email:</label><br />
-                    <input
-                        ref={emailRef}
-                        type="text"
-                        value={emailInput}
-                        onChange={(e) => setEmailInput(e.target.value)}
-                    />
-                    {emailError && <p className={styles.errorText}>
-                        <em>{emailError}</em></p>}
-                    {!emailError && <br />}
-                    <br />
-                    <label>Password:</label><br />
-                    <input
-                        ref={passwordRef}
-                        type="password"
-                        value={passwordInput}
-                        onChange={(e) => setPasswordInput(e.target.value)}
-                        className={passwordError ? styles.errorInput : ""}
-                    />
-                    {passwordError && <p className={styles.errorText}>
-                        <em>{passwordError}</em></p>}
+            <main className={styles.authCard} role="main" aria-labelledby="login-title">
+                <h1 id="login-title" className={styles.title}>Log In</h1>
+                <p className={styles.subtitle}>Welcome back</p>
+
+                <form className={styles.form}>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="email">Email</label>
+                        <input
+                            id="email"
+                            ref={emailRef}
+                            type="text"
+                            placeholder="you@gmail.com"
+                            value={emailInput}
+                            onChange={(e) => setEmailInput(e.target.value)}
+                            className={`${styles.input} ${emailError ? styles.inputError : ""}`}
+                            aria-invalid={!!emailError}
+                            aria-describedby={emailError ? "email-error" : undefined}
+                        />
+                        {emailError && (
+                            <p id="email-error" className={styles.errorText}><em>{emailError}</em></p>
+                        )}
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="password">Password</label>
+                        <input
+                            id="password"
+                            ref={passwordRef}
+                            type="password"
+                            placeholder="••••••"
+                            value={passwordInput}
+                            onChange={(e) => setPasswordInput(e.target.value)}
+                            className={`${styles.input} ${passwordError ? styles.inputError : ""}`}
+                            aria-invalid={!!passwordError}
+                            aria-describedby={passwordError ? "password-error" : undefined}
+                        />
+                        {passwordError && (
+                            <p id="password-error" className={styles.errorText}><em>{passwordError}</em></p>
+                        )}
+                    </div>
                 </form>
-                <button onClick={signIn} style={{ marginTop: !passwordError ? "20px" : 0 }}>
-                    Enter
-                </button><br />
-                <Link to={'/signup'}>Don´t have an account?</Link>
+
+                <button onClick={signIn} className={styles.primaryBtn}>Enter</button>
+
+                <div className={styles.mutedRow}>
+                    <div className={styles.divider} />
+                    <span>Don’t have an account? </span>
+                    <Link className={styles.link} to={'/signup'}>Create one</Link>
+                </div>
             </main>
         </div>
     );
+
 }

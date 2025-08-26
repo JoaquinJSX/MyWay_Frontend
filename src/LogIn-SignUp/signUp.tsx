@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import styles from './styles.module.css';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 interface SignUpProps {
     users: any[];
@@ -109,33 +109,72 @@ export default function SignUp({ users, setUsers }: SignUpProps) {
 
     return (
         <div className={styles.container}>
-            <form>
-                Username:
-                <input type="text"
-                    value={newUser.username ? newUser.username : ''}
-                    onChange={e => setNewUser({ ...newUser, username: e.target.value })} />
-                <br />
-                {usernameError && <p className={styles.errorText}>
-                    <em>{usernameError}</em></p>}
-                {!usernameError && <br />}
-                Email:
-                <input type="text"
-                    value={newUser.email ? newUser.email : ''}
-                    onChange={e => setNewUser({ ...newUser, email: e.target.value })} />
-                <br />
-                {emailError && <p className={styles.errorText}>
-                    <em>{emailError}</em></p>}
-                {!emailError && <br />}
-                Password:
-                <input type="password"
-                    value={newUser.password ? newUser.password : ''}
-                    onChange={e => setNewUser({ ...newUser, password: e.target.value })} />
-                <br />
-                {passwordError && <p className={styles.errorText}>
-                    <em>{passwordError}</em></p>}
-                {!passwordError && <br />}
-                <button onClick={e => createNewUser(e)}>Create</button>
-            </form>
+            <main className={styles.authCard} role="main" aria-labelledby="signup-title">
+                <h1 id="signup-title" className={styles.title}>Create account</h1>
+                <p className={styles.subtitle}>Start your journey</p>
+
+                <form className={styles.form}>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="username">Username</label>
+                        <input
+                            id="username"
+                            ref={usernameRef}
+                            type="text"
+                            placeholder="Your nickname"
+                            value={newUser.username ? newUser.username : ''}
+                            onChange={e => setNewUser({ ...newUser, username: e.target.value })}
+                            className={`${styles.input} ${usernameError ? styles.inputError : ""}`}
+                            aria-invalid={!!usernameError}
+                        />
+                        {usernameError && (
+                            <p className={styles.errorText}><em>{usernameError}</em></p>
+                        )}
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="signup-email">Email</label>
+                        <input
+                            id="signup-email"
+                            ref={emailRef}
+                            type="text"
+                            placeholder="you@gmail.com"
+                            value={newUser.email ? newUser.email : ''}
+                            onChange={e => setNewUser({ ...newUser, email: e.target.value })}
+                            className={`${styles.input} ${emailError ? styles.inputError : ""}`}
+                            aria-invalid={!!emailError}
+                        />
+                        {emailError && (
+                            <p className={styles.errorText}><em>{emailError}</em></p>
+                        )}
+                    </div>
+
+                    <div className={styles.formGroup}>
+                        <label className={styles.label} htmlFor="signup-pass">Password</label>
+                        <input
+                            id="signup-pass"
+                            ref={passwordRef}
+                            type="password"
+                            placeholder="At least 6 characters"
+                            value={newUser.password ? newUser.password : ''}
+                            onChange={e => setNewUser({ ...newUser, password: e.target.value })}
+                            className={`${styles.input} ${passwordError ? styles.inputError : ""}`}
+                            aria-invalid={!!passwordError}
+                        />
+                        {passwordError && (
+                            <p className={styles.errorText}><em>{passwordError}</em></p>
+                        )}
+                    </div>
+                </form>
+
+                <button onClick={e => createNewUser(e)} className={styles.primaryBtn}>
+                    Create account
+                </button>
+
+                <div className={styles.mutedRow}>
+                    <div className={styles.divider} />
+                    <Link className={styles.link} to="/login">Back to Log In</Link>
+                </div>
+            </main>
         </div>
     );
 }
