@@ -1,159 +1,202 @@
-/* === Layout base (pantalla completa, centrado) === */
-.container {
-  min-height: 100vh;
-  padding: 24px;
-  display: grid;
-  place-items: center;
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(64, 99, 255, 0.15), transparent 60%),
-    radial-gradient(1000px 500px at 110% 10%, rgba(0, 180, 216, 0.12), transparent 60%),
-    radial-gradient(900px 450px at 50% 120%, rgba(255, 166, 0, 0.10), transparent 60%),
-    #0f141b; /* fondo base oscuro */
-  overflow: auto;
+:global(html, body, #root) {
+    height: 100%;
 }
+
+:global(body) {
+    margin: 0;
+    /* quita el margen por defecto del body que provoca scroll */
+    overflow-x: hidden;
+    /* evita scroll horizontal por 1–2px de desbordes */
+    box-sizing: border-box;
+}
+
+:global(*),
+:global(*::before),
+:global(*::after) {
+    box-sizing: inherit;
+}
+
+.container {
+    /* anclado arriba, centrado horizontal */
+    min-height: 98dvh;
+    /* estable en móviles; puedes alternar con 100svh si prefieres */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    /* espaciado controlado por bloque (arriba/abajo) + inline (laterales) */
+    padding-block: clamp(16px, 3vh, 28px);
+    padding-inline: clamp(16px, 3vw, 32px);
+
+    /* fondo */
+    background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(64, 99, 255, 0.15), transparent 60%),
+        radial-gradient(1000px 500px at 110% 10%, rgba(0, 180, 216, 0.12), transparent 60%),
+        radial-gradient(900px 450px at 50% 120%, rgba(255, 166, 0, 0.10), transparent 60%),
+        #0f141b;
+
+    /* solo permitir scroll vertical cuando realmente haga falta */
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
 
 /* === Tarjeta de autenticación (glass / neumorfismo suave) === */
 .authCard {
-  width: 100%;
-  max-width: 420px;
-  background: rgba(19, 24, 32, 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(120, 130, 150, 0.18);
-  border-radius: 16px;
-  box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.03);
-  padding: 24px;
+    /* empuja un poco hacia abajo, pero sigue “arriba” */
+    margin-top: clamp(24px, 8vh, 96px);
+    margin-bottom: clamp(24px, 6vh, 72px);
+    /* evita que la sombra/gradiente dé sensación de corte al final */
+
+    inline-size: min(420px, 100%);
+    background: rgba(19, 24, 32, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(120, 130, 150, 0.18);
+    border-radius: 16px;
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    padding: 24px;
+
+    /* ayuda a que efectos visuales no generen “píxeles” de overflow en algunos navegadores */
+    overflow: clip;
 }
 
 /* Encabezado */
 .title {
-  margin: 0 0 8px;
-  font-size: 24px;
-  font-weight: 700;
-  color: #e9eef6;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+    margin: 0 0 8px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #e9eef6;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .subtitle {
-  margin: 0 0 20px;
-  color: #9fb0c6;
-  font-size: 14px;
+    margin: 0 0 20px;
+    color: #9fb0c6;
+    font-size: 14px;
 }
 
 /* === Formulario === */
 .form {
-  display: grid;
-  gap: 14px;
+    display: grid;
+    gap: 14px;
 }
 
 .formGroup {
-  display: grid;
-  gap: 6px;
+    display: grid;
+    gap: 6px;
 }
 
 .label {
-  color: #c9d4e3;
-  font-size: 13px;
+    color: #c9d4e3;
+    font-size: 13px;
 }
 
 .input {
-  height: 42px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(140, 150, 170, 0.25);
-  outline: none;
-  background: rgba(21, 26, 35, 0.85);
-  color: #e8eef7;
-  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    height: 42px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(140, 150, 170, 0.25);
+    outline: none;
+    background: rgba(21, 26, 35, 0.85);
+    color: #e8eef7;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
 }
 
 .input::placeholder {
-  color: #7f8a9e;
+    color: #7f8a9e;
 }
 
 .input:focus {
-  border-color: rgba(99, 179, 237, 0.8);
-  box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.15);
-  background: rgba(24, 30, 40, 0.95);
+    border-color: rgba(99, 179, 237, 0.8);
+    box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.15);
+    background: rgba(24, 30, 40, 0.95);
 }
 
 /* Estados de error (además de los bordes que ajustas via ref) */
 .inputError {
-  border-color: rgba(255, 92, 92, 0.9) !important;
-  box-shadow: 0 0 0 3px rgba(255, 92, 92, 0.15);
+    border-color: rgba(255, 92, 92, 0.9) !important;
+    box-shadow: 0 0 0 3px rgba(255, 92, 92, 0.15);
 }
 
 .errorText {
-  margin: -2px 0 4px;
-  font-size: 12px;
-  color: #ff6b6b;
+    margin: -2px 0 4px;
+    font-size: 12px;
+    color: #ff6b6b;
 }
 
 /* === Botones === */
 .primaryBtn {
-  margin-top: 4px;
-  width: 100%;
-  height: 44px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  color: #0f141b;
-  background: linear-gradient(135deg, #63b3ed, #60a5fa 45%, #7c3aed 100%);
-  cursor: pointer;
-  transition: transform 80ms ease, filter 160ms ease, box-shadow 160ms ease;
-  box-shadow: 0 8px 20px rgba(0, 102, 255, 0.25);
+    margin-top: 4px;
+    width: 100%;
+    height: 44px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: #0f141b;
+    background: linear-gradient(135deg, #63b3ed, #60a5fa 45%, #7c3aed 100%);
+    cursor: pointer;
+    transition: transform 80ms ease, filter 160ms ease, box-shadow 160ms ease;
+    box-shadow: 0 8px 20px rgba(0, 102, 255, 0.25);
 }
 
 .primaryBtn:active {
-  transform: translateY(1px);
+    transform: translateY(1px);
 }
 
 .primaryBtn:hover {
-  filter: brightness(1.05);
+    filter: brightness(1.05);
 }
 
 /* Link auxiliar */
 .mutedRow {
-  margin-top: 10px;
-  text-align: center;
-  font-size: 13px;
-  color: #9fb0c6;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: #9fb0c6;
 }
 
 .link {
-  color: #89b4ff;
-  text-decoration: none;
+    color: #89b4ff;
+    text-decoration: none;
 }
 
 .link:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 /* Separador visual (opcional) */
 .divider {
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(140, 150, 170, 0.25),
-    transparent
-  );
-  margin: 6px 0 4px;
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(140, 150, 170, 0.25),
+            transparent);
+    margin: 6px 0 4px;
 }
 
 /* === Responsivo === */
 @media (max-width: 420px) {
-  .authCard {
-    padding: 18px;
-    border-radius: 14px;
-  }
-  .title { font-size: 20px; }
+    .authCard {
+        margin-top: clamp(16px, 6vh, 56px);
+        padding: 18px;
+        border-radius: 14px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
 }
 
 @media (min-width: 900px) {
-  .authCard { padding: 28px; }
-  .title { font-size: 26px; }
+    .authCard {
+        padding: 28px;
+    }
+
+    .title {
+        font-size: 26px;
+    }
 }
