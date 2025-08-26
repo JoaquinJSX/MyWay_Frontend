@@ -19,7 +19,7 @@ export default function NewStepContainer({ goalIdProps, setIsShowingCreateStepFi
   const context2 = useContext(UIContext);
   if (!context1 || !context2) throw new Error("appContext must be used within an AppProvider");
   const { userLoggedIn } = context1;
-  const { steps, setSteps } = context2;
+  const { setSteps } = context2;
 
   const [newStep, setNewStep] = useState<NewStep>({ step_name: "", user_id: "", goal_id: "" });
 
@@ -28,14 +28,13 @@ export default function NewStepContainer({ goalIdProps, setIsShowingCreateStepFi
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...newStep, goal_id: goalId, user_id: userLoggedIn?.id })
+    }).then(res => {
+      if (!res.ok) throw new Error("Create step failed");
+      return res.json();
     })
-      .then(() => {
-        alert("Step created successfully");
+      .then((data) => {
+        setSteps(prev => [...prev, data]);
         setIsShowingCreateStepField(false);
-        setSteps([
-          ...steps,
-          { step_name: newStep.step_name, user_id: userLoggedIn?.id, goal_id: goalId }
-        ]);
       })
       .catch(error => {
         console.error("Error creating step:", error);

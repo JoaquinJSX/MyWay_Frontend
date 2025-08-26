@@ -10,7 +10,7 @@ interface SignUpProps {
 interface newUserObject {
     username: string | null;
     email: string | null;
-    password: string | null; 
+    password: string | null;
 }
 
 export default function SignUp({ users, setUsers }: SignUpProps) {
@@ -94,14 +94,16 @@ export default function SignUp({ users, setUsers }: SignUpProps) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newUser)
-            }).then(() => {
-                setUsers([...users, newUser]);
+            }).then(res => {
+                if (!res.ok) throw new Error("Create user failed");
+                return res.json();
+            }).then((data) => {
+                setUsers([...users, data.user]);
                 navigate('/login');
-            })
-                .catch(error => {
-                    console.error('Error creating user:', error);
-                    alert("Error creating user");
-                });
+            }).catch(error => {
+                console.error('Error creating user:', error);
+                alert("Error creating user");
+            });
         }
     }
 

@@ -49,11 +49,11 @@ export default function NewGoalContainer({ setIsShowingCreateGoalField }: NewGoa
           body: JSON.stringify(newGoal),
         });
         if (!res.ok) throw new Error("Create failed");
-        setGoals(prev => [...prev, newGoal]);
-        alert("Goal created!");
+        const data = await res.json();
+        setGoals(prev => [...prev, data.goal]);
         setIsShowingCreateGoalField(false);
       } catch (e: any) {
-        alert(`Error creating goal: ${e.message}`);
+        console.log(`Error creating goal: ${e.message}`);
       }
     }
   }

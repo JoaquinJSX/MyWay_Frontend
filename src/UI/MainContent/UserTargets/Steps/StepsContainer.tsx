@@ -40,7 +40,6 @@ export default function StepsContainer(
         const errorData = await response.json().catch(() => ({ message: "Unknown error" }));
         throw new Error(`HTTP error! Status: ${response.status}. Message: ${errorData.message || response.statusText}`);
       }
-      alert("Step deleted successfully");
       setSteps(prev => prev.filter(step => step.step_id !== stepId));
     } catch (error: any) {
       console.error("Error deleting step:", error);
