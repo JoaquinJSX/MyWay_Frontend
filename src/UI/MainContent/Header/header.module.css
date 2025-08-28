@@ -158,7 +158,8 @@
   .changeContentBtns { gap: 6px; }
   .changeContentBtns > button {
     padding: 8px 10px;
-    font-size: 12px;
+    font-size: 15px;
+    height: 35px;
   }
 }
 

@@ -14,7 +14,6 @@ export default function CompletedGoals() {
       const res = await fetch(`https://myway-backend.fly.dev/goals/${goalId}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Delete failed");
       setGoals(prev => prev.filter(g => g.goal_id !== goalId));
-      alert("Goal deleted successfully");
     } catch (e:any) {
       alert(`Error deleting goal: ${e.message}`);
     }
@@ -29,7 +28,6 @@ export default function CompletedGoals() {
       });
       if (!res.ok) throw new Error("Update failed");
       setGoals(prev => prev.map(g => g.goal_id === goalId ? { ...g, achieved: false } : g));
-      alert("Goal moved back to pending");
     } catch (e:any) {
       alert(`Error updating goal: ${e.message}`);
     }

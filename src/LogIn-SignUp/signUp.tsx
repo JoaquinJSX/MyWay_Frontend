@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import styles from './styles.module.css';
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { appContext } from "../App";
 
 interface SignUpProps {
     users: any[];
@@ -15,7 +16,11 @@ interface newUserObject {
 
 export default function SignUp({ users, setUsers }: SignUpProps) {
 
-    const navigate = useNavigate();
+    const context = useContext(appContext);
+    if (!context) {
+        throw new Error("appContext must be used within an AppProvider");
+    }
+    const { setUserLoggedIn } = context;
 
     const [newUser, setNewUser] = useState<newUserObject>({ username: null, email: null, password: null });
     const passwordRef = useRef<HTMLInputElement>(null);
@@ -64,28 +69,28 @@ export default function SignUp({ users, setUsers }: SignUpProps) {
         e.preventDefault();
 
         if (newUser.username === null) {
-            alert("Enter username");
+            setUsernameError("Enter username");
             return;
         } else if (newUser.username.length < 3) {
-            alert("Username must be at least 3 characters long");
+            setUsernameError("Username must be at least 3 characters long");
             return;
         } else if (users.some(user => user.username === newUser.username)) {
-            alert("Username already exists");
+            setUsernameError("Username already exists");
             return;
         } else if (newUser.email === null) {
-            alert("Enter email");
+            setEmailError("Enter email");
             return;
         } else if (!newUser.email.endsWith('@gmail.com')) {
-            alert("Email must end with @gmail.com");
+            setEmailError("Email must end with @gmail.com");
             return;
         } else if (users.some(user => user.email === newUser.email)) {
-            alert("Email is already registered");
+            setEmailError("Email is already registered");
             return;
         } else if (newUser.password === null) {
-            alert("Enter password");
+            setPasswordError("Enter password");
             return;
         } else if (newUser.password !== null && newUser.password.length < 6) {
-            alert("Password must be at least 6 characters long");
+            setPasswordError("Password must be at least 6 characters long");
             return;
         } else {
             fetch('https://myway-backend.fly.dev/users', {
@@ -99,7 +104,7 @@ export default function SignUp({ users, setUsers }: SignUpProps) {
                 return res.json();
             }).then((data) => {
                 setUsers([...users, data.user]);
-                navigate('/login');
+                setUserLoggedIn(data.user);
             }).catch(error => {
                 console.error('Error creating user:', error);
                 alert("Error creating user");

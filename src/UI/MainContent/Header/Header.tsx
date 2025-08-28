@@ -46,7 +46,7 @@ export default function Header({ setWhatIsShowing }: HeaderProps) {
                     'Content-Type': 'application/json'
                 }
             }).then(() => {
-                alert("Account deleted successfully");
+                setUserLoggedIn(null);
                 navigate('/login');
             })
                 .catch(error => {
