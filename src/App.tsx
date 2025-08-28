@@ -32,13 +32,15 @@ function useAppCtx() {
 }
 
 function RequireAuth() {
-  const { userLoggedIn } = useAppCtx();
-  return userLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
+  const { userLoggedIn, users } = useAppCtx();
+  const noUsers = !users || users.length === 0;
+  return userLoggedIn && !noUsers ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 function RedirectIfAuth() {
-  const { userLoggedIn } = useAppCtx();
-  return userLoggedIn ? <Navigate to="/main_content" replace /> : <Outlet />;
+  const { userLoggedIn, users } = useAppCtx();
+  const noUsers = !users || users.length === 0;
+  return userLoggedIn && !noUsers ? <Navigate to="/main_content" replace /> : <Outlet />;
 }
 
 function App() {

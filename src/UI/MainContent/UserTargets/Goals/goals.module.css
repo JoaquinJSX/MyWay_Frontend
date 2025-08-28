@@ -142,8 +142,6 @@
     padding: 14px;
     border-radius: 12px;
   }
-
-  /* Botonera: apílala si no cabe y aumenta área táctil */
   .goalButtonsContainer{
     gap: 8px;
     flex-wrap: wrap;
