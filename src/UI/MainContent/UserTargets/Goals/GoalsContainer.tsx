@@ -67,7 +67,14 @@ export default function GoalsContainer({ setGoalShowed, isShowingCreateGoalField
     const PercentageOfStepsCompleted = ({ goalId }: { goalId: string }) => {
         const goalSteps = steps.filter((step: any) => step.goal_id === goalId);
         const achievedSteps = goalSteps.filter((step: any) => step.achieved).length;
-        const percentage = (achievedSteps / goalSteps.length) * 100;
+
+        let percentage;
+
+        if (goalSteps.length === 0) {
+            percentage = 0;
+        } else {
+            percentage = (achievedSteps / goalSteps.length) * 100;
+        }
 
         return (
             <div className={styles.progressContainer}>
@@ -75,7 +82,6 @@ export default function GoalsContainer({ setGoalShowed, isShowingCreateGoalField
                     className={styles.progressBar}
                     style={{ width: `${percentage}%` }}
                 >
-                    {percentage.toFixed(0)}%
                 </div>
             </div>
         );

@@ -135,64 +135,93 @@ export default function EditInfo({ userLoggedIn, setUserLoggedIn, users }: EditU
 
     return (
         <section className={styles.editInfoContainer}>
-            <button onClick={() => navigate('/main_content')}>X</button>
-            {whatIsShowing === "" ?
-                <section>
-                    <h3 onClick={() => setWhatIsShowing("username")}>
-                        Change username
-                    </h3>
-                    <h3 onClick={() => setWhatIsShowing("email")}>
-                        Change email
-                    </h3>
-                    <h3 onClick={() => setWhatIsShowing("password")}>
-                        Change password
-                    </h3>
-                </section>
-                :
-                <section>
-                    <section>
-                        {whatIsShowing === "username" &&
-                            <>
-                                <input type="text"
-                                    ref={usernameRef}
-                                    value={editedUser.username}
-                                    onChange={e => setEditedUser({ ...editedUser, username: e.target.value })}
-                                />
-                                <br />
-                                {usernameError && <p className={styles.error}>{usernameError}</p>}
-                            </>}
-                        {whatIsShowing === "email" &&
-                            <>
-                                <input type="text"
-                                    ref={emailRef}
-                                    value={editedUser.email}
-                                    onChange={e => setEditedUser({ ...editedUser, email: e.target.value })}
-                                />
-                                <br />
-                                {emailError && <p className={styles.error}>{emailError}</p>}
-                            </>}
-                        {whatIsShowing === "password" &&
-                            <input type="password"
-                                ref={passwordRef}
-                                value={editedUser.password}
-                                onChange={e => setEditedUser({ ...editedUser, password: e.target.value })}
-                            />}
+            <div className={styles.card}>
+                <header className={styles.cardHeader}>
+                    <h2 className={styles.cardTitle}>Edit profile</h2>
+                    <button className={styles.closeBtn} onClick={() => navigate('/main_content')} aria-label="Close">×</button>
+                </header>
+
+                {whatIsShowing === "" ? (
+                    <section className={styles.optionList}>
+                        <h3 className={styles.optionItem} onClick={() => setWhatIsShowing("username")}>Change username</h3>
+                        <h3 className={styles.optionItem} onClick={() => setWhatIsShowing("email")}>Change email</h3>
+                        <h3 className={styles.optionItem} onClick={() => setWhatIsShowing("password")}>Change password</h3>
                     </section>
-                    <button onClick={() => setTryingSendEditedData(true)}>Send</button>
-                    <button onClick={() => setWhatIsShowing('')}>Close</button>
-                </section>
-            }
-            {tryingSendEditedData && whatIsShowing !== "password" &&
-                <section>
-                    Enter current password to confirm changes:
-                    <input type="password"
-                        value={editedUser.password}
-                        onChange={e => setEditedUser({ ...editedUser, password: e.target.value })}
-                        ref={passwordRef}
-                    />
-                    <button onClick={confirmPassword}>Confirm</button>
-                    {correctPassword === false && <p className={styles.error}>{passwordError}</p>}
-                </section>}
+                ) : (
+                    <section>
+                        <div className={styles.form}>
+                            {whatIsShowing === "username" && (
+                                <div className={styles.field}>
+                                    <label className={styles.label} htmlFor="ed-username">Username</label>
+                                    <input
+                                        id="ed-username"
+                                        className={styles.input}
+                                        type="text"
+                                        ref={usernameRef}
+                                        value={editedUser.username}
+                                        onChange={e => setEditedUser({ ...editedUser, username: e.target.value })}
+                                    />
+                                    {usernameError && <p className={styles.error}><em>{usernameError}</em></p>}
+                                </div>
+                            )}
+
+                            {whatIsShowing === "email" && (
+                                <div className={styles.field}>
+                                    <label className={styles.label} htmlFor="ed-email">Email</label>
+                                    <input
+                                        id="ed-email"
+                                        className={styles.input}
+                                        type="text"
+                                        ref={emailRef}
+                                        value={editedUser.email}
+                                        onChange={e => setEditedUser({ ...editedUser, email: e.target.value })}
+                                    />
+                                    {emailError && <p className={styles.error}><em>{emailError}</em></p>}
+                                </div>
+                            )}
+
+                            {whatIsShowing === "password" && (
+                                <div className={styles.field}>
+                                    <label className={styles.label} htmlFor="ed-password">New password</label>
+                                    <input
+                                        id="ed-password"
+                                        className={styles.input}
+                                        type="password"
+                                        ref={passwordRef}
+                                        value={editedUser.password}
+                                        onChange={e => setEditedUser({ ...editedUser, password: e.target.value })}
+                                    />
+                                    {passwordError && <p className={styles.error}><em>{passwordError}</em></p>}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className={styles.actions}>
+                            <button className={styles.primaryBtn} onClick={() => setTryingSendEditedData(true)}>Send</button>
+                            <button className={styles.ghostBtn} onClick={() => setWhatIsShowing('')}>Close</button>
+                        </div>
+                    </section>
+                )}
+
+                {tryingSendEditedData && whatIsShowing !== "password" && (
+                    <section className={styles.confirmBox} role="alertdialog" aria-live="polite">
+                        <span>Enter current password to confirm changes:</span>
+                        <input
+                            className={styles.input}
+                            type="password"
+                            value={editedUser.password}
+                            onChange={e => setEditedUser({ ...editedUser, password: e.target.value })}
+                            ref={passwordRef}
+                        />
+                        <div className={styles.actions}>
+                            <button className={styles.primaryBtn} onClick={confirmPassword}>Confirm</button>
+                            <button className={styles.ghostBtn} onClick={() => setTryingSendEditedData(false)}>Cancel</button>
+                        </div>
+                        {correctPassword === false && <p className={styles.error}>{passwordError}</p>}
+                    </section>
+                )}
+            </div>
         </section>
     );
+
 }
